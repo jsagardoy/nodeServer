@@ -1,4 +1,5 @@
-import { getUsersDB, setUsersDB } from '../models/usersDB.js'
+import User from '../models/User.js'
+
 export const logoutController = async (req, res) => {
   try {
     const cookies = req.cookies
@@ -7,9 +8,10 @@ export const logoutController = async (req, res) => {
 
     const refreshToken = cookies.jwt
 
-    const users = await getUsersDB()
-    console.log(users)
-    const foundUser = users.find((u) => u.refreshToken === refreshToken)
+    const foundUser = await User.findOne(
+      (u) => u.refreshToken === refreshToken
+    ).exec()
+
     if (!foundUser) {
       res.clearCookie('jwt', {
         httpOnly: true,
@@ -19,17 +21,23 @@ export const logoutController = async (req, res) => {
       res.status(204)
     }
 
-    const restUsers = users.filter((u) => u.username !== foundUser.username)
-
     const newUser = { ...foundUser, refreshToken: '' }
 
-    await setUsersDB([...restUsers, newUser])
+    const result = await User.updateOne(
+      foundUser.username === newUser.username,
+      newUser
+    ).exec()
 
-    res.clearCookie('jwt', {
-      httpOnly: true,
-      sameSite: 'None' /* secure:true only for PRO */
-    })
-    res.sendStatus(204)
+    if (!result) {
+      res.sendStatus(406)
+    }
+    if (result) {
+      res.clearCookie('jwt', {
+        httpOnly: true,
+        sameSite: 'None' /* secure:true only for PRO */
+      })
+      res.sendStatus(204)
+    }
   } catch (err) {
     console.log(err)
     res.status(500).json({ message: 'Server error' })

@@ -1,14 +1,17 @@
-import { readJSONFile, writeJSONFile } from '../utils/utils.js'
-
 import User from '../models/User.js'
 
-/* export const getUsersDB = async () => await readJSONFile('./models/users.json')
-export const setUsersDB = async (data) =>
-  await writeJSONFile('./models/users.json', data) */
-export const getUsersDB = async () => await readJSONFile('./models/users.json')
+export const getUsersDB = async () => {
+  try {
+    return await User.find({}).exec()
+  } catch (error) {
+    console.error('Error retreaving data from Database', error)
+    return null
+  }
+}
 export const setUsersDB = async (user) => {
   try {
-    return await User.create(user)
+    console.log(user)
+    return await User.create(user).exec()
   } catch (err) {
     console.error('Error creating user', err)
     return null

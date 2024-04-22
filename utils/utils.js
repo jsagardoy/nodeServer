@@ -1,4 +1,3 @@
-import { getUsersDB, setUsersDB } from '../models/usersDB.js'
 import { readFile, writeFile } from 'node:fs/promises'
 
 import User from '../models/User.js'
@@ -9,7 +8,7 @@ export const readJSONFile = async (filePath) => {
     const rawData = await readFile(filePath, 'utf-8')
     return JSON.parse(rawData)
   } catch (error) {
-    console.log('Error reading the file \n', error)
+    console.error('Error reading the file \n', error)
   }
 }
 
@@ -18,7 +17,7 @@ export const writeJSONFile = async (filePath, data) => {
     const jsonData = JSON.stringify(data)
     await writeFile(filePath, jsonData)
   } catch (error) {
-    console.log('Error writing the file \n', error)
+    console.error('Error writing the file \n', error)
   }
 }
 
@@ -49,16 +48,15 @@ export const isValidPassword = async (password, checkingPassword) => {
 
 export const storeRefreshToken = async (username, refreshToken) => {
   try {
-    const users = await getUsersDB()
-    const otherUsers = users.filter((u) => u.username !== username)
-    const foundUser = users.find((u) => u.username === username)
-    if (foundUser) {
-      const currentUser = { ...foundUser, refreshToken }
-      const newUsers = [...otherUsers, currentUser]
-      await setUsersDB(newUsers)
+    const foundUser = await User.findOneAndUpdate(
+      { username: username },
+      { refreshToken: refreshToken }
+    ).exec()
+
+    if (!foundUser) {
+      throw error
     }
-    return
   } catch (error) {
-    console.log(`error storing refresh Token`, error)
+    console.error(`Error storing refresh Token`, error)
   }
 }

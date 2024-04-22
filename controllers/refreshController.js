@@ -1,5 +1,4 @@
-import dotenv from 'dotenv'
-import { getUsersDB } from '../models/usersDB.js'
+import User from '../models/User.js'
 import jwt from 'jsonwebtoken'
 
 export const handleRefreshTokenController = async (req, res) => {
@@ -8,8 +7,9 @@ export const handleRefreshTokenController = async (req, res) => {
 
   const refreshToken = cookies.jwt
 
-  const users = await getUsersDB()
-  const foundUser = users.find((person) => person.refreshToken === refreshToken)
+  const foundUser = User.findOne(
+    (person) => person.refreshToken === refreshToken
+  )
 
   if (!foundUser) return res.sendStatus(403)
 

@@ -16,7 +16,6 @@ export const loginController = async (req, res) => {
     if (!username || !password) {
       return res.status(400).json({ message: 'Incorrect user and password' })
     }
-
     const user = await findOne(username)
     //usuario no encontrado
     if (!user) {
@@ -64,7 +63,7 @@ export const loginController = async (req, res) => {
         }
       )
 
-      storeRefreshToken(user.username, refreshToken)
+      await storeRefreshToken(user.username, refreshToken)
 
       res.cookie('jwt', refreshToken, {
         httpOnly: true,
