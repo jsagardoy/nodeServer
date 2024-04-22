@@ -16,7 +16,6 @@ const userSchema = new Schema({
     unique: true
   },
   roles: {
-    type: [String],
     user: {
       type: Number,
       default: 3003

@@ -42,7 +42,7 @@ export const signupController = async (req, res) => {
     //create and save newUser
     const createUserInDB = await setUsersDB(newUser)
     if (!createUserInDB) {
-      return res.status(422).send('Cound not process the request')
+      return res.status(422).send('Could not process the request')
     }
     // Create a token
     const token = jwt.sign({ id: newUser._id }, process.env.ACCESS_TOKEN, {

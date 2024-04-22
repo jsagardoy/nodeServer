@@ -8,7 +8,7 @@ const router = express.Router()
 router.route('/').get(getUsers)
 
 router
-  .route('/:id')
+  .route('/:username')
   .get(verifyRoles(ROLES_LIST.admin, ROLES_LIST.editor), getUser)
 
 export default router

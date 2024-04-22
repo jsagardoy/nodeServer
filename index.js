@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import { credentials } from './middleware/credentials.js'
 import dotenv from 'dotenv'
 import express from 'express'
+import grantRoles from './routes/api/grantRoles.js'
 import login from './routes/login.js'
 import logout from './routes/logout.js'
 import mongoose from 'mongoose'
@@ -33,6 +34,7 @@ app.use('/logout', logout)
 //validate JWT
 app.use(verifyJWT)
 app.use('/users', users)
+app.use('/admin', grantRoles)
 
 mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB')

@@ -10,8 +10,8 @@ export const getUsersDB = async () => {
 }
 export const setUsersDB = async (user) => {
   try {
-    console.log(user)
-    return await User.create(user).exec()
+    console.log('user', user)
+    return await User.create(user)
   } catch (err) {
     console.error('Error creating user', err)
     return null

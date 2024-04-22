@@ -7,9 +7,7 @@ export const handleRefreshTokenController = async (req, res) => {
 
   const refreshToken = cookies.jwt
 
-  const foundUser = User.findOne(
-    (person) => person.refreshToken === refreshToken
-  )
+  const foundUser = await User.findOne({ refreshToken: refreshToken })
 
   if (!foundUser) return res.sendStatus(403)
 
