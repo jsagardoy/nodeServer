@@ -1,6 +1,8 @@
-import { ROLES_LIST } from '../../config/rolesList'
+import { ROLES_LIST } from '../../config/rolesList.js'
 import express from 'express'
-import { verifyRoles } from '../../middleware/verifyRoles'
+import { grantRoles } from '../../controllers/grantRolesController.js'
+import { verifyRoles } from '../../middleware/verifyRoles.js'
 
-const routes = express.Router()
-routes.route('/:username:roles').get('/:username', verifyRoles(ROLES_LIST.admin), grantRoles)
+const router = express.Router()
+router.route('/').post(verifyRoles(ROLES_LIST.admin), grantRoles)
+export default router

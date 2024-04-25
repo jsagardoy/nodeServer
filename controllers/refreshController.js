@@ -1,4 +1,4 @@
-import User from '../models/User.js'
+import { findRefreshToken } from '../utils/utils.js'
 import jwt from 'jsonwebtoken'
 
 export const handleRefreshTokenController = async (req, res) => {
@@ -7,7 +7,7 @@ export const handleRefreshTokenController = async (req, res) => {
 
   const refreshToken = cookies.jwt
 
-  const foundUser = await User.findOne({ refreshToken: refreshToken })
+  const foundUser = await findRefreshToken(refreshToken)
 
   if (!foundUser) return res.sendStatus(403)
 

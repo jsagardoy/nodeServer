@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises'
 
 import User from '../models/User.js'
 import bcrypt from 'bcrypt'
+import { error } from 'node:console'
 
 export const readJSONFile = async (filePath) => {
   try {
@@ -26,15 +27,23 @@ export const compareString = (string1, string2) =>
 
 export const findOne = async (username) => {
   try {
-    return await User.findOne({ username: username }).exec()
+    const foundUser = await User.findOne({ username: username }).exec()
+    if (!foundUser) {
+      throw error
+    }
+    return foundUser
   } catch (error) {
+    console.log(error)
     return null
   }
 }
 export const findOneByEmail = async (email) => {
   try {
     const foundUser = await User.findOne({ email: email }).exec()
-    return foundUser !== undefined ? foundUser : false
+    if (!foundUser) {
+      throw error
+    }
+    return foundUser
   } catch (error) {
     return null
   }
@@ -58,5 +67,19 @@ export const storeRefreshToken = async (username, refreshToken) => {
     }
   } catch (error) {
     console.error(`Error storing refresh Token`, error)
+  }
+}
+export const findRefreshToken = async (refreshToken) => {
+  try {
+    const foundUser = await User.findOne({ refreshToken: refreshToken }).exec()
+
+    if (!foundUser) {
+      throw error
+    }
+
+    return foundUser
+  } catch (error) {
+    console.error(error)
+    return null
   }
 }

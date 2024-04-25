@@ -21,7 +21,8 @@ const userSchema = new Schema({
       default: 3003
     },
     editor: Number,
-    admin: Number
+    admin: Number,
+    banned: Number
   },
   refreshToken: String
 })
