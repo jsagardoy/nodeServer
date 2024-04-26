@@ -6,7 +6,6 @@ export const logoutController = async (req, res) => {
 
     if (!cookies?.jwt) {
       return res.json({ message: 'No token found' }).status(204)
-      /* return res.status(204).json({ message: 'No token found' }) */
     }
 
     const refreshToken = cookies.jwt
