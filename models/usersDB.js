@@ -18,9 +18,11 @@ export const setUsersDB = async (user) => {
   }
 }
 
-export const updateUsersBD = async (user) => {
-  try { 
-    return await User.findOneAndUpdate({ username: user.username }, user, { new: true })
+export const updateUserBD = async (user) => {
+  try {
+    return await User.findOneAndUpdate({ username: user.username }, user, {
+      new: true
+    })
   } catch (error) {
     console.error('Error updating user', error)
     return null

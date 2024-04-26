@@ -24,7 +24,11 @@ const userSchema = new Schema({
     admin: Number,
     banned: Number
   },
-  refreshToken: String
+  refreshToken: String,
+  active: {
+    type: Boolean,
+    default: true
+  }
 })
 
 export default mongoose.model('User', userSchema)

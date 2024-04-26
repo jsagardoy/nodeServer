@@ -1,3 +1,5 @@
+import { ROLES_LIST } from './config/rolesList.js'
+import activationUser from './routes/api/activationUser.js'
 import bodyParser from 'body-parser'
 import { connectDB } from './config/dbConnection.js'
 import cookieParser from 'cookie-parser'
@@ -12,6 +14,7 @@ import refresh from './routes/refresh.js'
 import signup from './routes/register.js'
 import users from './routes/api/users.js'
 import { verifyJWT } from './middleware/verifyJWT.js'
+import { verifyRoles } from './middleware/verifyRoles.js'
 
 dotenv.config()
 
@@ -31,10 +34,14 @@ app.use('/signup', signup)
 app.use('/refresh', refresh)
 app.use('/logout', logout)
 
-//validate JWT
+//validate JWT y acciones solo para usuarios logados
 app.use(verifyJWT)
 app.use('/users', users)
+
+//acciones solo para administradores logados
+app.use(verifyRoles(ROLES_LIST.admin))
 app.use('/admin', grantRoles)
+app.use('/activationUser', activationUser)
 
 mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB')

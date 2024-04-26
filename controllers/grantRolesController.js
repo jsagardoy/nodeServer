@@ -1,7 +1,7 @@
 import { findOne, findRefreshToken } from '../utils/utils.js'
 
 import { ROLES_LIST } from '../config/rolesList.js'
-import { updateUsersBD } from '../models/usersDB.js'
+import { updateUserBD } from '../models/usersDB.js'
 
 export const grantRoles = async (req, res) => {
   try {
@@ -23,11 +23,11 @@ export const grantRoles = async (req, res) => {
         message: 'One or more roles are not allowed'
       })
     }
-    
+
     //verificamos permisos del que hace la peticion
     const refreshToken = cookies.jwt
     const foundUser = await findRefreshToken(refreshToken)
-    
+
     const isEditor = roles.find((elem) => elem === 'editor')
     const isAdmin = roles.find((elem) => elem === 'admin')
     const isBanned = roles.find((elem) => elem === 'banned')
@@ -54,7 +54,7 @@ export const grantRoles = async (req, res) => {
     newUser.roles = newRoles
 
     //incluirlo en BBDD
-    const result = await updateUsersBD(newUser)
+    const result = await updateUserBD(newUser)
 
     return res.status(200).json({
       message: 'Roles granted',

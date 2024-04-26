@@ -23,8 +23,8 @@ export const loginController = async (req, res) => {
     }
     //usuario encontrado
 
-    if (user.roles?.banned) {
-      return res.status(403).send({ auth: false, token: null })
+    if (user.roles?.banned || !user.active) {
+          return res.status(403).send({ auth: false, token: null })
     }
     const match = await isValidPassword(password, user.password)
 
