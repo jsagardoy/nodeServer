@@ -39,7 +39,6 @@ export const logoutController = async (req, res) => {
         .status(204)
     }
   } catch (err) {
-    console.log(err)
     return res.json({ message: 'Server error' }).status(500)
   }
 }

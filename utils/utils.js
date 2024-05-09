@@ -51,7 +51,7 @@ export const findOneByEmail = async (email) => {
 
 export const isValidPassword = async (password, checkingPassword) => {
   if (!password || !checkingPassword) return false
-
+ 
   return await bcrypt.compare(password, checkingPassword)
 }
 

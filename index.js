@@ -3,6 +3,8 @@ import activationUser from './routes/api/activationUser.js'
 import bodyParser from 'body-parser'
 import { connectDB } from './config/dbConnection.js'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import corsOptions from './config/corsOptions.js'
 import { credentials } from './middleware/credentials.js'
 import dotenv from 'dotenv'
 import express from 'express'
@@ -21,12 +23,14 @@ dotenv.config()
 connectDB()
 const app = express()
 //middleware for cookies
-app.use(cookieParser())
 const hostname = '127.0.0.1'
-const port = 3000
+const port = 5001
 app.use(credentials)
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions))
+app.use(cookieParser())
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: false }))
 
 //routes
 app.use('/login', login)

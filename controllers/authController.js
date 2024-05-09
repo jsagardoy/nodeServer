@@ -19,18 +19,17 @@ export const loginController = async (req, res) => {
     const user = await findOne(username)
     //usuario no encontrado
     if (!user) {
-      res.status(401).send('User not found')
+      return res.sendStatus(401)
     }
-    //usuario encontrado
 
     if (user.roles?.banned || !user.active) {
-          return res.status(403).send({ auth: false, token: null })
+      return res.status(403).send({ auth: false, token: null })
     }
-    const match = await isValidPassword(password, user.password)
 
+    const match = await isValidPassword(password, user.password)
     //password incorrecto
     if (!match) {
-      return res.status(403).send({ auth: false, token: null })
+      res.sendStatus(401)
     }
 
     if (match) {
@@ -73,9 +72,9 @@ export const loginController = async (req, res) => {
         sameSite: 'None',
         maxAge: 24 * 60 * 60 * 1000
       })
-      res.json({ accessToken })
+      res.json({ roles, accessToken })
     }
   } catch (error) {
-    res.status(500).send('Error in the server')
+    return res.sendStatus(500)
   }
 }
